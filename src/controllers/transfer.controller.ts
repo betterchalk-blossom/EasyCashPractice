@@ -10,7 +10,9 @@ import {
 import {
   del, get,
   getModelSchemaRef, param, patch, post, put, requestBody,
-  response
+  RequestContext,
+  response,
+  RestBindings
 } from '@loopback/rest';
 import {Transfer} from '../models';
 import {TransferRepository} from '../repositories';
@@ -20,6 +22,9 @@ export class TransferController {
   constructor(
     @inject("user_service")
     public userService: UserService,
+
+    @inject(RestBindings.Http.CONTEXT)
+    private requestCtx: RequestContext,
 
     @repository(TransferRepository)
     public transferRepository: TransferRepository,
@@ -42,8 +47,15 @@ export class TransferController {
       },
     })
     transfer: Omit<Transfer, 'id'>,
-  ): Promise<Transfer> {
-    return this.userService.transferMoney(transfer);
+  ) {
+    const {response} = this.requestCtx;
+    try{
+      return this.userService.transferMoney(transfer)
+    }
+    catch(error){
+      console.log(error, "ERROR");
+      return response.status(400).send(`${error}`)
+    }
   }
 
   @get('/transfers/count')
