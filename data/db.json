@@ -1,0 +1,17 @@
+{
+  "ids": {
+    "BankInfo": 1,
+    "Account": 1,
+    "User": 3,
+    "Transfer": 1
+  },
+  "models": {
+    "BankInfo": {},
+    "Account": {},
+    "User": {
+      "1": "{\"email\":\"blossom@gmail.com\",\"balance\":40,\"id\":\"1\"}",
+      "2": "{\"email\":\"chinanuchikezie515@gmail.com\",\"balance\":200,\"id\":\"2\"}"
+    },
+    "Transfer": {}
+  }
+}
