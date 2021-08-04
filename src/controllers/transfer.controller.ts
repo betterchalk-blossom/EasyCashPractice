@@ -1,26 +1,20 @@
-import { inject } from '@loopback/core';
+import {inject} from '@loopback/core';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
 import {Transfer} from '../models';
 import {TransferRepository} from '../repositories';
-import { UserService } from '../services/user-service';
+import {UserService} from '../services/user-service';
 
 export class TransferController {
   constructor(
@@ -28,8 +22,8 @@ export class TransferController {
     public userService: UserService,
 
     @repository(TransferRepository)
-    public transferRepository : TransferRepository,
-  ) {}
+    public transferRepository: TransferRepository,
+  ) { }
 
   @post('/transfers')
   @response(200, {
@@ -42,7 +36,7 @@ export class TransferController {
         'application/json': {
           schema: getModelSchemaRef(Transfer, {
             title: 'NewTransfer',
-            exclude: ['id'],
+            exclude: ['id', 'destAcctId', 'sourceAcctId', 'txnDate', 'status'],
           }),
         },
       },

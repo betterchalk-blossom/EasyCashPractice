@@ -34,14 +34,12 @@ export class Transfer extends Entity {
   amount: number;
 
   @property({
-    type: 'string',
-    required: true,
+    type: 'string'
   })
   sourceAcctId?: string;
 
   @property({
-    type: 'string',
-    required: true,
+    type: 'string'
   })
   destAcctId?: string;
 
