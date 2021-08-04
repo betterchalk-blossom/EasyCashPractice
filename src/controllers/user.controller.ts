@@ -116,7 +116,7 @@ export class UserController {
     return this.userRepository.findById(id, filter);
   }
 
-  @patch('/users/{id}')
+  @patch('/users/{id}/cash')
   @response(204, {
     description: 'User PATCH success',
   })
@@ -125,7 +125,7 @@ export class UserController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(User, {partial: true}),
+          schema: getModelSchemaRef(User, {exclude: ['id'], partial: true}),
         },
       },
     })
@@ -133,6 +133,7 @@ export class UserController {
   ): Promise<void> {
     await this.userService.updateCashBalance(id, user);
     console.log(id, user, "Let see");
+    console.log(response)
   }
 
   @put('/users/{id}')

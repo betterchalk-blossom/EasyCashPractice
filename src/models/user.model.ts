@@ -17,7 +17,7 @@ export class User extends Entity {
   email: string;
 
   @property.array(Account)
-  accounts?: Account[];
+  accounts: Account[];
 
   @property({
     type: 'number',

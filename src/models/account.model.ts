@@ -1,9 +1,9 @@
 import {Entity, model, property} from '@loopback/repository';
 
 enum acc_type {
-  BANK = "Bank",
-  CASH = "Cash",
-  CREDIT_CARD = "Credit Card"
+  "Bank",
+  "Cash",
+  "Credit Card"
 }
 
 @model()
@@ -29,9 +29,7 @@ export class Account extends Entity {
   })
   account_type: acc_type;
 
-  @property({
-    required: true,
-  })
+  @property()
   bankInfo: BankInfo;
 
 

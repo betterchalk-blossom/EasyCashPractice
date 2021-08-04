@@ -1,3 +1,4 @@
+import { inject } from '@loopback/core';
 import {
   Count,
   CountSchema,
@@ -19,9 +20,13 @@ import {
 } from '@loopback/rest';
 import {Transfer} from '../models';
 import {TransferRepository} from '../repositories';
+import { UserService } from '../services/user-service';
 
 export class TransferController {
   constructor(
+    @inject("user_service")
+    public userService: UserService,
+
     @repository(TransferRepository)
     public transferRepository : TransferRepository,
   ) {}
@@ -44,7 +49,7 @@ export class TransferController {
     })
     transfer: Omit<Transfer, 'id'>,
   ): Promise<Transfer> {
-    return this.transferRepository.create(transfer);
+    return this.userService.transferMoney(transfer);
   }
 
   @get('/transfers/count')

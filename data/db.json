@@ -2,7 +2,7 @@
   "ids": {
     "BankInfo": 1,
     "Account": 1,
-    "User": 3,
+    "User": 5,
     "Transfer": 1
   },
   "models": {
@@ -10,7 +10,9 @@
     "Account": {},
     "User": {
       "1": "{\"email\":\"blossom@gmail.com\",\"balance\":40,\"id\":\"1\"}",
-      "2": "{\"email\":\"chinanuchikezie515@gmail.com\",\"balance\":200,\"id\":\"2\"}"
+      "2": "{\"email\":\"chinanuchikezie515@gmail.com\",\"balance\":200,\"id\":\"2\"}",
+      "3": "{\"id\":\"3\",\"email\":\"blosom123@gmail.com\",\"balance\":394,\"accounts\":[{\"account_type\":0,\"bankInfo\":{\"bankName\":\"FirstBank\",\"accountNum\":\"12345\"}}]}",
+      "4": "{\"id\":\"4\",\"email\":\"testimony@gmail.com\",\"accounts\":[{\"account_type\":0,\"bankInfo\":{\"bankName\":\"Access\",\"accountNum\":\"56789\"}}],\"balance\":400}"
     },
     "Transfer": {}
   }

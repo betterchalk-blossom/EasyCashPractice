@@ -1,6 +1,6 @@
 import {Entity, model, property} from '@loopback/repository';
 
-enum transfer_status{
+export enum transfer_status{
   PENDING = "Pending",
   COMPLETED = "Completed",
   FAILED = "Failed"
@@ -37,13 +37,13 @@ export class Transfer extends Entity {
     type: 'string',
     required: true,
   })
-  sourceAcctId: string;
+  sourceAcctId?: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  destAcctId: string;
+  destAcctId?: string;
 
   @property({
     type: 'date',
@@ -53,7 +53,7 @@ export class Transfer extends Entity {
   @property({
     type: 'string',
   })
-  status: transfer_status;
+  status?: transfer_status;
 
 
   constructor(data?: Partial<Transfer>) {
