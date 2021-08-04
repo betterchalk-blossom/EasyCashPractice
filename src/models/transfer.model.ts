@@ -1,6 +1,6 @@
 import {Entity, model, property} from '@loopback/repository';
 
-export enum transfer_status{
+export enum transfer_status {
   PENDING = "Pending",
   COMPLETED = "Completed",
   FAILED = "Failed"
@@ -50,6 +50,7 @@ export class Transfer extends Entity {
 
   @property({
     type: 'string',
+    default: transfer_status.PENDING
   })
   status?: transfer_status;
 

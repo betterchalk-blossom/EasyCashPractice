@@ -1,6 +1,5 @@
 import {repository} from "@loopback/repository";
-import {response} from "@loopback/rest";
-import {Account, Transfer, transfer_status, User} from "../models";
+import {Transfer, transfer_status, User} from "../models";
 import {TransferRepository, UserRepository} from "../repositories";
 
 export class UserService {
@@ -35,15 +34,9 @@ export class UserService {
             transfer.status = transfer_status.COMPLETED;
             return this.transferRepo.create(transfer)
         } else {
+            transfer.status = transfer_status.FAILED;
             throw 'Insufficient Balance';
         }
     }
 }
 
-// transfer.senderId,
-// transfer.recipientId,
-// transfer.amount,
-// transfer.sourceAcctId,
-// transfer.destAcctId,
-// transfer.txnDate
-// transfer.status
