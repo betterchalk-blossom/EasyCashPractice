@@ -1,35 +1,29 @@
-import { inject } from '@loopback/core';
+import {inject} from '@loopback/core';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
-import {User} from '../models';
+import {Login, User} from '../models';
 import {UserRepository} from '../repositories';
-import { UserService } from '../services/user-service';
+import {UserService} from '../services/user-service';
 
 export class UserController {
   constructor(
     @inject("user_service")
-    public userService: UserService, 
+    public userService: UserService,
 
     @repository(UserRepository)
-    public userRepository : UserRepository,
-  ) {}
+    public userRepository: UserRepository,
+  ) { }
 
   @post('/users')
   @response(200, {
@@ -49,7 +43,36 @@ export class UserController {
     })
     user: Omit<User, 'id'>,
   ): Promise<User> {
-    return this.userService.createUser(user);
+    return this.userService.signup(user);
+  }
+
+  @post('/users/login')
+  @response(200, {
+    description: 'Token',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            token: {
+              type: 'string',
+            },
+          },
+        },
+      },
+    },
+  })
+  async findOne(
+    @requestBody({
+      description: 'The input of login function',
+      required: true,
+      content: {
+        'application/json': {schema: getModelSchemaRef(Login)},
+      }
+    })
+    login: Omit<Login, 'id'>
+  ): Promise<{token: string}> {
+    return this.userService.loginUser(login);
   }
 
   @get('/users/count')

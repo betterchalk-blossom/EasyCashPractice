@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {inject} from '@loopback/core';
 import {
   Count,
@@ -10,21 +11,17 @@ import {
 import {
   del, get,
   getModelSchemaRef, param, patch, post, put, requestBody,
-  RequestContext,
-  response,
-  RestBindings
+  response
 } from '@loopback/rest';
 import {Transfer} from '../models';
 import {TransferRepository} from '../repositories';
 import {UserService} from '../services/user-service';
 
+@authenticate('jwt') // <---- Apply the @authenticate decorator at the class level
 export class TransferController {
   constructor(
     @inject("user_service")
     public userService: UserService,
-
-    @inject(RestBindings.Http.CONTEXT)
-    private requestCtx: RequestContext,
 
     @repository(TransferRepository)
     public transferRepository: TransferRepository,
@@ -47,15 +44,8 @@ export class TransferController {
       },
     })
     transfer: Omit<Transfer, 'id'>,
-  ) {
-    const {response} = this.requestCtx;
-    try{
+  ): Promise <Transfer>{
       return this.userService.transferMoney(transfer)
-    }
-    catch(error){
-      console.log(error, "ERROR");
-      return response.status(400).send(`${error}`)
-    }
   }
 
   @get('/transfers/count')
