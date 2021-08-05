@@ -2,18 +2,24 @@
   "ids": {
     "BankInfo": 1,
     "Account": 1,
-    "User": 7,
-    "Transfer": 2
+    "User": 5,
+    "Transfer": 2,
+    "UserCredentials": 2
   },
   "models": {
     "BankInfo": {},
     "Account": {},
     "User": {
-      "5": "{\"email\":\"chinanu@gmail.com\",\"password\":\"blossom123\",\"accounts\":[{\"account_type\":1,\"bankInfo\":{\"bankName\":\"UBA\",\"accountNum\":\"9383723379\"}}],\"balance\":500,\"id\":\"5\"}",
-      "6": "{\"email\":\"blossom@gmail.com\",\"password\":\"blossom\",\"accounts\":[{\"account_type\":1,\"bankInfo\":{\"bankName\":\"Access\",\"accountNum\":\"57375943\"}}],\"balance\":600,\"id\":\"6\"}"
+      "1": "{\"email\":\"blossom@gmail.com\",\"password\":\"$2b$10$s6t690CGkgvNx5y6Qi35VuWNOZkJw.bp/SdPWjUPZwteDtgsDokKW\",\"accounts\":[{\"account_type\":\"Cash\",\"bankInfo\":{\"bankName\":\"UBA\",\"accountNum\":\"7294328992\"}}],\"balance\":300,\"id\":\"1\"}",
+      "46a78a5a-ecb6-4d64-990d-48413f6f16e0": "{\"id\":\"46a78a5a-ecb6-4d64-990d-48413f6f16e0\",\"email\":\"blossom123@gmail.com\",\"password\":\"$2b$10$wPMsZki2ithYewBfEqd2ieDMuvJC57qn9.0lGJe4PWuf6IW55ctcu\"}",
+      "befa376b-15ec-42e4-92ae-d442304d346e": "{\"id\":\"befa376b-15ec-42e4-92ae-d442304d346e\",\"email\":\"chike@gmail.com\",\"password\":\"$2b$10$5ZsgbPi.lQrtX9F3TYDEJeege1Ec.SM0yAbYOxk9eT2lxoC/Tjag6\"}",
+      "3f0aa478-164f-4b7f-b4f8-aca8ea59f0dc": "{\"id\":\"3f0aa478-164f-4b7f-b4f8-aca8ea59f0dc\",\"email\":\"chike1@gmail.com\",\"password\":\"$2b$10$JxqBeP2nrpvxfgUZbZRa4.pSa19By4H45FPbb728TWuSXuIMZjzdq\",\"balance\":90}"
     },
     "Transfer": {
       "1": "{\"senderId\":\"4\",\"recipientId\":\"3\",\"amount\":100,\"txnDate\":\"2021-08-04T12:18:07.113Z\",\"status\":\"Completed\",\"id\":\"1\"}"
+    },
+    "UserCredentials": {
+      "759e4a4e-eb05-4c69-bdce-5183af891967": "{\"id\":\"759e4a4e-eb05-4c69-bdce-5183af891967\",\"password\":\"$2b$10$JxqBeP2nrpvxfgUZbZRa4.pSa19By4H45FPbb728TWuSXuIMZjzdq\",\"userId\":\"3f0aa478-164f-4b7f-b4f8-aca8ea59f0dc\"}"
     }
   }
 }

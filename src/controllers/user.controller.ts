@@ -1,3 +1,5 @@
+import {TokenService} from '@loopback/authentication';
+import {UserServiceBindings, MyUserService, TokenServiceBindings, UserRepository, User} from '@loopback/authentication-jwt';
 import {inject} from '@loopback/core';
 import {
   Count,
@@ -10,12 +12,38 @@ import {
 import {
   del, get,
   getModelSchemaRef, param, patch, post, put, requestBody,
-  response
+  response,
+  SchemaObject,
 } from '@loopback/rest';
-import {Login, User} from '../models';
-import {UserRepository} from '../repositories';
+// import {Login, User} from '../models';
+// import {UserRepository} from '../repositories';
 import {UserService} from '../services/user-service';
 
+export type Credentials = {
+  email: string;
+  password: string;
+};
+
+const CredentialsSchema: SchemaObject = {
+  type: 'object',
+  required: ['email', 'password'],
+  properties: {
+    email: {
+      type: 'string',
+      format: 'email',
+    },
+    password: {
+      type: 'string'
+    },
+  },
+};
+export const CredentialsRequestBody = {
+  description: 'The input of login function',
+  required: true,
+  content: {
+    'application/json': {schema: CredentialsSchema},
+  },
+};
 export class UserController {
   constructor(
     @inject("user_service")
@@ -23,6 +51,12 @@ export class UserController {
 
     @repository(UserRepository)
     public userRepository: UserRepository,
+
+    @inject(UserServiceBindings.USER_SERVICE)
+    public user_Service: MyUserService,
+
+    @inject(TokenServiceBindings.TOKEN_SERVICE)
+    public jwtService: TokenService,
   ) { }
 
   @post('/users')
@@ -45,35 +79,64 @@ export class UserController {
   ): Promise<User> {
     return this.userService.signup(user);
   }
-
-  @post('/users/login')
-  @response(200, {
-    description: 'Token',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            token: {
-              type: 'string',
+  @post('/users/login', {
+    responses: {
+      '200': {
+        description: 'Token',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                token: {
+                  type: 'string',
+                },
+              },
             },
           },
         },
       },
     },
   })
-  async findOne(
-    @requestBody({
-      description: 'The input of login function',
-      required: true,
-      content: {
-        'application/json': {schema: getModelSchemaRef(Login)},
-      }
-    })
-    login: Omit<Login, 'id'>
+  async login(
+    @requestBody(CredentialsRequestBody) credentials: Credentials,
   ): Promise<{token: string}> {
-    return this.userService.loginUser(login);
+    // ensure the user exists, and the password is correct
+    const user = await this.user_Service.verifyCredentials(credentials);
+    // convert a User object into a UserProfile object (reduced set of properties)
+    const userProfile = this.user_Service.convertToUserProfile(user);
+    // create a JSON Web Token based on the user profile
+    const token = await this.jwtService.generateToken(userProfile);
+    return {token};
   }
+  // @post('/users/login')
+  // @response(200, {
+  //   description: 'Token',
+  //   content: {
+  //     'application/json': {
+  //       schema: {
+  //         type: 'object',
+  //         properties: {
+  //           token: {
+  //             type: 'string',
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // })
+  // async findOne(
+  //   @requestBody({
+  //     description: 'The input of login function',
+  //     required: true,
+  //     content: {
+  //       'application/json': {schema: getModelSchemaRef(Login)},
+  //     }
+  //   })
+  //   login: Omit<Login, 'id'>
+  // ): Promise<{token: string}> {
+  //   return this.userService.loginUser(login);
+  // }
 
   @get('/users/count')
   @response(200, {

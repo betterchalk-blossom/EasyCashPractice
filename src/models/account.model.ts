@@ -1,9 +1,9 @@
 import {Entity, model, property} from '@loopback/repository';
 
 enum acc_type {
-  "Bank",
-  "Cash",
-  "Credit Card"
+  Bank = "Bank",
+  Cash = "Cash",
+  CreditCard = "Credit Card"
 }
 
 @model()

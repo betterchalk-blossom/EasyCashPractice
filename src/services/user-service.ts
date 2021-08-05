@@ -1,10 +1,10 @@
 import {TokenService} from '@loopback/authentication';
-import {MyUserService, TokenServiceBindings, UserServiceBindings} from '@loopback/authentication-jwt';
+import {MyUserService, TokenServiceBindings, UserServiceBindings, UserRepository, User} from '@loopback/authentication-jwt';
 import {inject} from '@loopback/core';
 import {repository} from "@loopback/repository";
 import {HttpErrors} from '@loopback/rest';
-import {Login, Transfer, transfer_status, User} from "../models";
-import {TransferRepository, UserRepository} from "../repositories";
+import {Login, Transfer, transfer_status} from "../models";
+import {TransferRepository} from "../repositories";
 const bcrypt = require("bcrypt");
 
 const IfUserExistsError = 'Email already in use';
@@ -26,7 +26,7 @@ export class UserService {
         return this.userRepo.create(user);
     }
 
-    async signup(user: User) {
+    async signup(user: Omit<User, 'id'>) {
         const userExists = await this.userRepo.findOne({
             where: {email: user.email.toLowerCase()}
         });
@@ -35,34 +35,19 @@ export class UserService {
             throw new HttpErrors.Conflict(IfUserExistsError);
         }
 
-        bcrypt.genSalt(10, (err: any, salt: any) => {
-            bcrypt.hash(user.password, salt, (err: any, hash: string) => {
-                user.password = hash;
-            });
-        });
-
-        return this.userRepo.create({
-            email: user.email,
-            password: user.password,
-            accounts: user.accounts,
-            balance: user.balance
-        });
-    }
-
-    async loginUser(login: Login) {
-        // ensure the user exists, and the password is correct
-        const user = await this.userService.verifyCredentials(login);
-
-        // convert a User object into a UserProfile object (reduced set of properties)
-        const userProfile = this.userService.convertToUserProfile(user);
-
-        // create a JSON Web Token based on the user profile
-        const token = await this.jwtService.generateToken(userProfile);
-        return {token};
+        user.password = await bcrypt.hash(user.password, await bcrypt.genSalt())
+        let savedUser = await this.userRepo.create(user);
+        let x = await this.userRepo.userCredentials(savedUser.id).create({password: user.password})
+        return savedUser;
     }
 
     async updateCashBalance(id: string, user: User) {
         const user_id = await this.userRepo.findById(id);
+
+        if(user.balance === undefined || null){
+            user.balance = 0;
+        }
+
         user.balance = user_id.balance + user.balance;
         return this.userRepo.updateById(id, user);
     }
@@ -106,6 +91,12 @@ export class UserService {
         console.log(validPassword)
 
         return validPassword;
+    }
+    convertToUserProfile(user: User) {
+        return {
+            id: user.id,
+            email: user.email
+        };
     }
 }
 
